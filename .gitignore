@@ -1,2 +1,2 @@
-# Local-only media (not published to GitHub)
-assets/
+# Keep résumé PDF local only (may contain private contact info)
+assets/*.pdf

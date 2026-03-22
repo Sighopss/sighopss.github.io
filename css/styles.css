@@ -395,28 +395,14 @@ a:hover {
   filter: blur(40px);
 }
 
-.hero__avatar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.hero__frame img {
+  display: block;
   width: 100%;
   max-width: 420px;
-  aspect-ratio: 4 / 5;
+  height: auto;
   border-radius: calc(var(--radius-lg) - 3px);
-  background: linear-gradient(160deg, var(--bg-elevated) 0%, #141418 45%, var(--bg) 100%);
-  border: 1px solid var(--border);
-}
-
-.hero__avatar-initials {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: clamp(4.5rem, 14vw, 7rem);
-  letter-spacing: -0.06em;
-  line-height: 1;
-  background: linear-gradient(135deg, #fff 20%, var(--accent) 55%, var(--accent-warm) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  object-fit: cover;
+  aspect-ratio: 4 / 5;
 }
 
 .hero__scroll {
