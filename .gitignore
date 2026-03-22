@@ -1,2 +1,2 @@
-# Keep résumé PDF local only (may contain private contact info)
-assets/*.pdf
+# Local media (not in repo)
+assets/
