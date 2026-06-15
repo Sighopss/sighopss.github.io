@@ -755,13 +755,6 @@ a:hover {
   padding: 0.28rem 0.65rem;
 }
 
-.project-card__links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.55rem;
-  padding-top: 0.25rem;
-}
-
 @media (max-width: 900px) {
   .projects {
     grid-template-columns: 1fr;
