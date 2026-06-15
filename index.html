@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Trevor Kutto — AI & Automation Software Developer, Cloud Engineer. Ottawa, Canada. Python, AWS, LLM integrations, and cloud-native systems."
+      content="Trevor Kutto — AI Engineer, Software Developer & DevSecOps. Ottawa, Canada. Bedrock, AgentCore, RAG, AWS, Python, TypeScript, React."
     />
     <meta property="og:title" content="Trevor Kutto | Software Developer & Cloud Engineer" />
     <meta property="og:description" content="AI-focused developer building scalable apps, automation, and cloud systems." />
@@ -37,6 +37,7 @@
           <ul id="nav-menu" class="nav__list">
             <li><a href="#about">About</a></li>
             <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
             <li><a href="#experience">Experience</a></li>
             <li><a href="#education">Education</a></li>
             <li><a href="#contact" class="nav__cta">Contact</a></li>
@@ -56,8 +57,8 @@
               Built for scale<span class="hero__title-dot">.</span>
             </h1>
             <p class="hero__lead" data-reveal>
-              Software developer and cloud engineer focused on LLM integrations, REST APIs, and reliable systems in AWS,
-              Azure, and Linux environments — Ottawa, Canada.
+              AI engineer and DevSecOps-minded developer shipping LLM products, multi-agent pipelines, and secure
+              cloud systems on AWS — Ottawa, Canada.
             </p>
             <div class="hero__actions" data-reveal>
               <a class="btn btn--primary" href="https://www.linkedin.com/in/trevor-kutto-b52782327" target="_blank" rel="noopener noreferrer">
@@ -95,14 +96,16 @@
           <div class="about__layout">
             <p class="about__statement">
               AI &amp; automation-focused developer with <strong>3+ years</strong> shipping scalable applications,
-              automating workflows, and supporting production in cloud-native and Linux environments. I integrate
-              <strong>LLM APIs and RAG pipelines</strong>, build <strong>RESTful services</strong>, and partner with teams
-              to map processes, document solutions, and ship technology people actually adopt.
+              automating workflows, and supporting production in cloud-native and Linux environments. At Algonquin’s AI
+              Accelerator I build <strong>production LLM systems</strong> — multi-agent strategy pipelines, RAG-grounded
+              grant intelligence, automated news platforms, and a 24/7 AI radio station — with security hardening baked in
+              from day one.
             </p>
             <p class="about__statement">
-              Comfortable across <strong>Python, JavaScript/TypeScript, and React</strong>, with hands-on cloud work on
-              <strong>AWS, Azure, and GCP</strong> — plus exposure to low-code acceleration tools. Currently deepening
-              cloud and AI systems through <strong>Algonquin College</strong> programs.
+              Comfortable across <strong>Python, TypeScript, and React</strong>, with hands-on AWS work spanning
+              <strong>Bedrock, Lambda, API Gateway, DynamoDB, S3, Amplify, Polly, and Transcribe</strong>. I pair
+              software delivery with a <strong>cybersecurity and DevSecOps</strong> mindset: IAM least-privilege, secure
+              API design, vulnerability assessment, and production RCA in Linux environments.
             </p>
           </div>
         </div>
@@ -118,36 +121,37 @@
             <article class="bento__card bento__card--wide">
               <h3>AI &amp; automation</h3>
               <ul class="tag-list">
-                <li>Process mapping &amp; workflow automation</li>
-                <li>LLM APIs &amp; GPT integration</li>
-                <li>RAG pipelines</li>
-                <li>Change management support</li>
+                <li>Amazon Bedrock &amp; multi-agent pipelines (AgentCore)</li>
+                <li>RAG pipelines &amp; knowledge-base grounding</li>
+                <li>LLM APIs, prompt engineering &amp; inference workflows</li>
+                <li>Voice AI — Polly TTS, Transcribe STT, Web Speech API</li>
               </ul>
             </article>
             <article class="bento__card">
               <h3>Development</h3>
               <ul class="tag-list">
-                <li>Python (Flask, Django)</li>
-                <li>JavaScript / TypeScript</li>
-                <li>React</li>
-                <li>REST &amp; GraphQL (fundamentals)</li>
+                <li>Python (Flask, Lambda handlers)</li>
+                <li>TypeScript / JavaScript</li>
+                <li>React 19 · Next.js 15 · Vite</li>
+                <li>REST APIs · WebSockets · HLS streaming</li>
               </ul>
             </article>
             <article class="bento__card">
               <h3>Cloud &amp; DevOps</h3>
               <ul class="tag-list">
-                <li>AWS (IAM, EC2, S3, Lambda, CloudFormation)</li>
-                <li>Azure · GCP</li>
-                <li>Docker · CI/CD · IaC</li>
+                <li>AWS (Lambda, API Gateway, DynamoDB, S3, Amplify, CDK)</li>
+                <li>Terraform · CloudFormation · Docker · CI/CD</li>
+                <li>EventBridge · SQS · presigned S3 uploads</li>
+                <li>Azure · GCP fundamentals</li>
               </ul>
             </article>
             <article class="bento__card bento__card--wide">
-              <h3>Cybersecurity</h3>
+              <h3>Cybersecurity &amp; DevSecOps</h3>
               <ul class="tag-list">
+                <li>Security hardening waves &amp; IAM least-privilege</li>
+                <li>Secure API design, CORS, HMAC verification</li>
                 <li>Vulnerability assessment &amp; secure system design</li>
-                <li>Secure API design &amp; hardening mindset</li>
-                <li>Security monitoring, logging &amp; root cause analysis</li>
-                <li>Linux/Unix · shell scripting · debugging</li>
+                <li>Production monitoring, logging &amp; RCA · Linux/Unix</li>
               </ul>
             </article>
             <article class="bento__card">
@@ -170,6 +174,98 @@
         </div>
       </section>
 
+      <section id="projects" class="section section--projects">
+        <div class="section__inner">
+          <header class="section__head">
+            <h2 class="section__title">Projects</h2>
+            <p class="section__kicker">Shipped at the AI Accelerator</p>
+          </header>
+          <div class="projects">
+            <article class="project-card project-card--featured">
+              <div class="project-card__top">
+                <span class="project-card__badge">Flagship</span>
+                <h3>VIBE — AgentCore HITL Platform</h3>
+              </div>
+              <p class="project-card__summary">
+                End-to-end AI strategy platform: clients submit intake forms, reviewers approve via Slack, and a
+                Bedrock multi-agent pipeline (Research → Strategy → Technical) produces board-ready reports and
+                PowerPoint decks — with human-in-the-loop gates at every stage.
+              </p>
+              <ul class="project-card__highlights">
+                <li>Slack HITL approvals, progress bars, and secure Function URL interactivity</li>
+                <li>Knowledge-base admin with presigned S3 uploads and document lifecycle management</li>
+                <li>Multi-wave security hardening: IAM, sigv4 Function URLs, CloudWatch, least-privilege policies</li>
+              </ul>
+              <div class="project-card__stack" aria-label="Technologies used">
+                <span>Python</span><span>TypeScript</span><span>React</span><span>Bedrock</span><span>Lambda</span><span>DynamoDB</span><span>Amplify</span><span>Slack API</span>
+              </div>
+              <div class="project-card__links">
+                <a class="btn btn--primary" href="https://vibe.acceleratorhub.ai" target="_blank" rel="noopener noreferrer">Live demo</a>
+                <a class="btn btn--ghost" href="https://admin.acceleratorhub.ai" target="_blank" rel="noopener noreferrer">Admin dashboard</a>
+              </div>
+            </article>
+
+            <article class="project-card">
+              <div class="project-card__top">
+                <span class="project-card__badge project-card__badge--accent">RAG · Voice</span>
+                <h3>CanGrant AI</h3>
+              </div>
+              <p class="project-card__summary">
+                Canadian grant intelligence platform that matches founders to funding programs, drafts and scores
+                NSERC CCSIF proposals grounded in $1.4M+ of real winning applications, and supports voice-in/voice-out
+                grant advising.
+              </p>
+              <ul class="project-card__highlights">
+                <li>Two-layer RAG grounding: official criteria + funded proposal patterns</li>
+                <li>PDF extraction pipeline with SHA-256 deduplication on S3 upload</li>
+                <li>PIPEDA / Law 25 privacy pages; data resident in ca-central-1</li>
+              </ul>
+              <div class="project-card__stack" aria-label="Technologies used">
+                <span>Next.js 15</span><span>TypeScript</span><span>Python</span><span>Bedrock</span><span>Polly</span><span>Transcribe</span><span>Terraform</span>
+              </div>
+            </article>
+
+            <article class="project-card">
+              <div class="project-card__top">
+                <span class="project-card__badge project-card__badge--warm">24/7 · Broadcast</span>
+                <h3>Kev FM — AI News Radio</h3>
+              </div>
+              <p class="project-card__summary">
+                A always-on AI radio station hosted by DJ Kev: Claude writes unique DJ breaks, Polly voices them, and
+                royalty-free music streams over HLS so every listener tunes into the same live broadcast.
+              </p>
+              <ul class="project-card__highlights">
+                <li>Producer/broadcaster architecture with sliding-window HLS delivery</li>
+                <li>Graceful degradation: Bedrock → template DJ, Polly → SAPI → silence</li>
+                <li>WebSocket now-playing feed and no-repeat track programming policy</li>
+              </ul>
+              <div class="project-card__stack" aria-label="Technologies used">
+                <span>TypeScript</span><span>Node.js</span><span>Bedrock</span><span>Polly</span><span>Express</span><span>HLS</span><span>ffmpeg</span>
+              </div>
+            </article>
+
+            <article class="project-card">
+              <div class="project-card__top">
+                <span class="project-card__badge">Pipeline</span>
+                <h3>AI News Hub</h3>
+              </div>
+              <p class="project-card__summary">
+                Fully automated news aggregation platform pulling 19 RSS sources — major AI labs plus 11 Ottawa AI
+                companies — summarizing articles with Bedrock and serving them through a React dashboard.
+              </p>
+              <ul class="project-card__highlights">
+                <li>EventBridge-scheduled ingestion Lambda with S3-backed deduplication</li>
+                <li>Custom RSSHub routes for Ottawa AI company feeds</li>
+                <li>Filterable React 19 frontend with TanStack Router and Query</li>
+              </ul>
+              <div class="project-card__stack" aria-label="Technologies used">
+                <span>Python</span><span>TypeScript</span><span>React 19</span><span>Bedrock</span><span>CDK</span><span>S3</span><span>API Gateway</span>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
       <section id="experience" class="section section--experience">
         <div class="section__inner">
           <header class="section__head">
@@ -186,10 +282,11 @@
                   <p class="timeline__meta"><span>Ottawa, ON</span> · <time datetime="2026-01">Jan 2026</time> – ongoing</p>
                 </header>
                 <ul class="timeline__bullets">
-                  <li>Built AI-enabled backends in Python; integrated GPT/LLM APIs into cloud applications.</li>
-                  <li>Developed and consumed REST APIs for inference workflows and automation pipelines.</li>
-                  <li>Deployed containerized apps on AWS and Azure with CI/CD.</li>
-                  <li>Prototyped AI-driven solutions; documented workflows for adoption.</li>
+                  <li>Lead developer on <strong>VIBE</strong> — Bedrock multi-agent HITL platform with Slack approvals, AgentCore pipeline orchestration, and production security hardening (Python, TypeScript, React, AWS).</li>
+                  <li>Built <strong>CanGrant AI</strong> — RAG-grounded grant matching, proposal drafting/scoring, voice chat, and NSERC PDF export (Next.js, Python Lambda, Bedrock, Polly, Terraform).</li>
+                  <li>Shipped <strong>Kev FM</strong> — 24/7 AI radio with Claude-scripted DJ breaks, Polly neural TTS, and HLS live streaming (TypeScript, Node.js, Bedrock, ffmpeg).</li>
+                  <li>Delivered <strong>AI News Hub</strong> — automated RSS ingestion from 19 sources, Bedrock summarization, and React dashboard (Python, TypeScript, CDK, S3).</li>
+                  <li>Applied DevSecOps practices: IAM least-privilege, presigned S3 uploads, API hardening, CloudWatch monitoring, and vulnerability-aware system design.</li>
                 </ul>
               </article>
             </li>
