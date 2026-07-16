@@ -2,24 +2,27 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Trevor Kutto | AI Engineer, Software Developer and DevSecOps. Ottawa, Canada. Bedrock, AgentCore, RAG, AWS, Python, TypeScript, React."
+      content="Trevor Kutto | AI Engineer, Software Developer and Cybersecurity. Ottawa, Canada. Agentic LLM systems, Bedrock, RAG, AWS, DevSecOps, offensive security research."
     />
-    <meta property="og:title" content="Trevor Kutto | Software Developer & Cloud Engineer" />
-    <meta property="og:description" content="AI-focused developer building scalable apps, automation, and cloud systems." />
+    <meta property="og:title" content="Trevor Kutto | AI Engineer · Software Developer · Cybersecurity" />
+    <meta property="og:description" content="Agentic LLM systems, secure cloud platforms, and hands-on security research, shipped to production on AWS." />
     <meta property="og:type" content="website" />
     <meta name="theme-color" content="#070708" />
-    <link rel="icon" href="images/tk-logo.png" type="image/png" />
-    <title>Trevor Kutto | Developer & Cloud Engineer</title>
+    <link rel="icon" href="images/tk-favicon.png?v=20260716-1145" type="image/png" />
+    <title>Trevor Kutto | AI Engineer · Software Developer · Cybersecurity</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Syne:wght@500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/styles.css?v=20260716-1145" />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -27,7 +30,7 @@
     <header class="site-header">
       <div class="site-header__inner">
         <a class="logo" href="#" aria-label="Trevor Kutto home">
-          <img class="logo__img" src="images/tk-logo.png" alt="" width="120" height="40" decoding="async" />
+          <img class="logo__img" src="images/tk-logo-header.png?v=20260716-1145" alt="" width="72" height="40" decoding="async" />
         </a>
         <nav class="nav" aria-label="Primary">
           <button type="button" class="nav__toggle" aria-expanded="false" aria-controls="nav-menu">
@@ -57,8 +60,9 @@
               Built for scale<span class="hero__title-dot">.</span>
             </h1>
             <p class="hero__lead" data-reveal>
-              AI engineer and DevSecOps-minded developer shipping LLM products, multi-agent pipelines, and secure
-              cloud systems on AWS. Based in Ottawa, Canada.
+              AI engineer, software developer, and security researcher. I design, build, and deploy LLM-powered
+              agentic systems on AWS. I attack them before anyone else can through evals, red-teaming, and
+              production hardening built in from day one. Ottawa, Canada.
             </p>
             <div class="hero__actions" data-reveal>
               <a class="btn btn--primary" href="https://www.linkedin.com/in/trevor-kutto-b52782327" target="_blank" rel="noopener noreferrer">
@@ -69,7 +73,15 @@
             <dl class="hero__meta" data-reveal>
               <div>
                 <dt>Location</dt>
-                <dd>Ottawa, ON</dd>
+                <dd>Ottawa, ON · Eastern Time</dd>
+              </div>
+              <div>
+                <dt>Focus</dt>
+                <dd>Agentic AI · DevSecOps</dd>
+              </div>
+              <div>
+                <dt>Clearance</dt>
+                <dd>Eligible, Government of Canada</dd>
               </div>
             </dl>
           </div>
@@ -95,17 +107,18 @@
           </header>
           <div class="about__layout">
             <p class="about__statement">
-              AI &amp; automation-focused developer with <strong>3+ years</strong> shipping scalable applications,
-              automating workflows, and supporting production in cloud-native and Linux environments. At Algonquin’s AI
-              Accelerator I build <strong>production LLM systems</strong>: multi-agent strategy pipelines, RAG-grounded
-              grant intelligence, automated news platforms, and a 24/7 AI radio station, with security hardening baked in
-              from day one.
+              I own LLM-powered agentic workflows <strong>end-to-end</strong>, from an ambiguous business problem to
+              production agents that reason, plan, and act across tools, APIs, and sensitive enterprise data. At the
+              <strong>AI Accelerator Hub</strong> I ship multi-agent strategy pipelines, RAG-grounded platforms, and
+              real-time systems in clean, testable, observable <strong>Python and TypeScript</strong>, with evaluation
+              frameworks that measure accuracy, safety, and latency instead of trial-and-error.
             </p>
             <p class="about__statement">
-              Comfortable across <strong>Python, TypeScript, and React</strong>, with hands-on AWS work spanning
-              <strong>Bedrock, Lambda, API Gateway, DynamoDB, S3, Amplify, Polly, and Transcribe</strong>. I pair
-              software delivery with a <strong>cybersecurity and DevSecOps</strong> mindset: IAM least-privilege, secure
-              API design, vulnerability assessment, and production RCA in Linux environments.
+              The second half of my practice is <strong>security</strong>: SOC monitoring and incident response with
+              SIEM tooling, vulnerability management, and controls mapped to <strong>NIST CSF, ISO 27001, and
+              ITSG-33</strong>, plus continuous offensive research on <strong>HackerOne, Bugcrowd, Intigriti, and
+              Immunefi</strong> (IDOR/BOLA, SSRF, auth bypass, cloud misconfiguration) and LLM red-teaming against
+              prompt injection, data exfiltration, and agent misuse. I build systems the way an attacker reads them.
             </p>
           </div>
         </div>
@@ -125,8 +138,8 @@
               </div>
               <p class="project-card__summary">
                 End-to-end AI strategy platform: clients submit intake forms, reviewers approve via Slack, and a
-                Bedrock multi-agent pipeline (Research → Strategy → Technical) produces board-ready reports and
-                PowerPoint decks, with human-in-the-loop gates at every stage.
+                Bedrock multi-agent pipeline (Research → Citation check → Strategy → Technical) produces board-ready
+                reports, presentation decks, and structured run data, with human-in-the-loop gates at every stage.
               </p>
               <ul class="project-card__highlights">
                 <li>Slack HITL approvals, progress bars, and secure Function URL interactivity</li>
@@ -135,6 +148,18 @@
               </ul>
               <div class="project-card__stack" aria-label="Technologies used">
                 <span>Python</span><span>TypeScript</span><span>React</span><span>Bedrock</span><span>Lambda</span><span>DynamoDB</span><span>Amplify</span><span>Slack API</span>
+              </div>
+              <div id="vibe-demo" class="project-card__demo">
+                <div class="project-card__demo-head">
+                  <span class="project-card__demo-live"><i aria-hidden="true"></i> The platform's live process map. This component runs in the production admin dashboard, driven by real WebSocket and S3 telemetry. Shown here replaying a run.</span>
+                  <a href="projects/vibe-live/process-map.html?v=20260716-1145" target="_blank" rel="noopener noreferrer">Open full screen ↗</a>
+                </div>
+                <iframe
+                  src="projects/vibe-live/process-map.html?embed=1&amp;v=20260716-1145"
+                  title="VIBE live process map: the production pipeline visualization, replaying a run"
+                  loading="eager"
+                  scrolling="no"
+                ></iframe>
               </div>
             </article>
 
@@ -207,55 +232,72 @@
           </header>
           <div class="bento">
             <article class="bento__card bento__card--wide">
-              <h3>AI &amp; automation</h3>
+              <h3>Agentic AI &amp; LLM systems</h3>
               <ul class="tag-list">
-                <li>Amazon Bedrock &amp; multi-agent pipelines (AgentCore)</li>
-                <li>RAG pipelines &amp; knowledge-base grounding</li>
-                <li>LLM APIs, prompt engineering &amp; inference workflows</li>
-                <li>Voice AI: Polly TTS, Transcribe STT, Web Speech API</li>
+                <li>Multi-agent orchestration, RAG, tool/function calling, MCP</li>
+                <li>ReAct &amp; Plan-and-Execute patterns · LangChain / LangGraph</li>
+                <li>Claude, OpenAI &amp; Cohere via Amazon Bedrock and provider APIs</li>
+                <li>Vector retrieval: pgvector, OpenSearch, Pinecone</li>
+                <li>Voice AI: Polly TTS, Transcribe STT</li>
               </ul>
             </article>
             <article class="bento__card">
-              <h3>Development</h3>
+              <h3>AI evaluation &amp; safety</h3>
               <ul class="tag-list">
-                <li>Python (Flask, Lambda handlers)</li>
-                <li>TypeScript / JavaScript</li>
+                <li>Eval frameworks: accuracy, safety, latency</li>
+                <li>LLM red-teaming: prompt injection, data exfiltration, agent misuse</li>
+                <li>Guardrails, tracing &amp; observability</li>
+              </ul>
+            </article>
+            <article class="bento__card">
+              <h3>Software development</h3>
+              <ul class="tag-list">
+                <li>Python (primary) · TypeScript · SQL · Bash · C#/.NET</li>
                 <li>React 19 · Next.js 15 · Vite</li>
                 <li>REST APIs · WebSockets · HLS streaming</li>
-              </ul>
-            </article>
-            <article class="bento__card">
-              <h3>Cloud &amp; DevOps</h3>
-              <ul class="tag-list">
-                <li>AWS (Lambda, API Gateway, DynamoDB, S3, Amplify, CDK)</li>
-                <li>Terraform · CloudFormation · Docker · CI/CD</li>
-                <li>EventBridge · SQS · presigned S3 uploads</li>
-                <li>Azure · GCP fundamentals</li>
+                <li>Microservices, event-driven &amp; serverless</li>
               </ul>
             </article>
             <article class="bento__card bento__card--wide">
-              <h3>Cybersecurity &amp; DevSecOps</h3>
+              <h3>Security operations</h3>
               <ul class="tag-list">
-                <li>Security hardening waves &amp; IAM least-privilege</li>
-                <li>Secure API design, CORS, HMAC verification</li>
-                <li>Vulnerability assessment &amp; secure system design</li>
-                <li>Production monitoring, logging &amp; RCA · Linux/Unix</li>
+                <li>SIEM: Splunk, Microsoft Sentinel · Defender · MITRE ATT&amp;CK</li>
+                <li>Threat detection, triage &amp; incident response</li>
+                <li>Vulnerability management with Nessus, remediation to closure</li>
+                <li>IAM · RBAC · zero-trust access · network segmentation</li>
               </ul>
             </article>
             <article class="bento__card">
-              <h3>Data &amp; analytics</h3>
+              <h3>Offensive security</h3>
               <ul class="tag-list">
-                <li>Pandas · NumPy</li>
-                <li>Logging, metrics &amp; performance</li>
-                <li>Data pipelines &amp; analysis workflows</li>
+                <li>Bug bounty: HackerOne, Bugcrowd, Intigriti, Immunefi</li>
+                <li>OWASP Top 10 · IDOR/BOLA · SSRF · auth bypass</li>
+                <li>Burp Suite · Wireshark · custom Python tooling</li>
+              </ul>
+            </article>
+            <article class="bento__card">
+              <h3>Governance &amp; compliance</h3>
+              <ul class="tag-list">
+                <li>NIST CSF · ISO 27001 · ITSG-33 · CIS Benchmarks</li>
+                <li>Risk assessment &amp; audit readiness</li>
+                <li>Security for AI in regulated industries</li>
               </ul>
             </article>
             <article class="bento__card bento__card--wide">
-              <h3>Collaboration</h3>
+              <h3>Cloud &amp; DevSecOps</h3>
               <ul class="tag-list">
-                <li>Technical &amp; process documentation</li>
-                <li>Agile / Scrum</li>
-                <li>Stakeholder collaboration &amp; training</li>
+                <li>AWS: Lambda, API Gateway, DynamoDB, S3, IAM, KMS, GuardDuty, CloudTrail, Security Hub</li>
+                <li>Docker · Terraform · CloudFormation · CDK · GitHub Actions</li>
+                <li>Secure CI/CD with SAST, DAST &amp; SCA</li>
+                <li>Azure · Defender for Cloud · GCP fundamentals</li>
+              </ul>
+            </article>
+            <article class="bento__card">
+              <h3>Ways of working</h3>
+              <ul class="tag-list">
+                <li>Customer-facing, end-to-end use-case ownership</li>
+                <li>Clear docs, evals &amp; success criteria over vibes</li>
+                <li>Agile · stakeholder collaboration · training</li>
               </ul>
             </article>
           </div>
@@ -273,16 +315,16 @@
               <div class="timeline__marker" aria-hidden="true"></div>
               <article class="timeline__card">
                 <header class="timeline__head">
-                  <h3>AI &amp; Cloud Software Developer / Research Assistant</h3>
-                  <p class="timeline__org">Algonquin College, AI Accelerator Placement</p>
-                  <p class="timeline__meta"><span>Ottawa, ON</span> · <time datetime="2026-01">Jan 2026</time> – ongoing</p>
+                  <h3>Forward Deployed AI &amp; Cloud Engineer</h3>
+                  <p class="timeline__org">AI Accelerator Hub, Algonquin College</p>
+                  <p class="timeline__meta"><span>Ottawa, ON</span> · <time datetime="2026-01">Jan 2026</time> – present</p>
                 </header>
                 <ul class="timeline__bullets">
-                  <li>Lead developer on <strong>VIBE</strong>, a Bedrock multi-agent HITL platform with Slack approvals, AgentCore pipeline orchestration, and production security hardening (Python, TypeScript, React, AWS).</li>
-                  <li>Built <strong>CanGrant AI</strong>: RAG-grounded grant matching, proposal drafting/scoring, voice chat, and NSERC PDF export (Next.js, Python Lambda, Bedrock, Polly, Terraform).</li>
-                  <li>Shipped <strong>Kev FM</strong>, a 24/7 AI radio with Claude-scripted DJ breaks, Polly neural TTS, and HLS live streaming (TypeScript, Node.js, Bedrock, ffmpeg).</li>
-                  <li>Delivered <strong>AI News Hub</strong>: automated RSS ingestion from 19 sources, Bedrock summarization, and React dashboard (Python, TypeScript, CDK, S3).</li>
-                  <li>Applied DevSecOps practices: IAM least-privilege, presigned S3 uploads, API hardening, CloudWatch monitoring, and vulnerability-aware system design.</li>
+                  <li>Own LLM-powered agentic workflows end-to-end, from early prototype to production agents that reason, plan, and act across tools, APIs, and enterprise data via RAG and ReAct / Plan-and-Execute patterns (Claude &amp; OpenAI on Amazon Bedrock).</li>
+                  <li>Lead developer on <strong>VIBE</strong>, a Bedrock multi-agent HITL platform with Slack approvals, pipeline orchestration, and a live process-map dashboard (Python, TypeScript, React, Lambda, DynamoDB).</li>
+                  <li>Built <strong>CanGrant AI</strong> (RAG grant intelligence with voice advising), <strong>Kev&nbsp;FM</strong> (24/7 AI radio over HLS), and <strong>AI News Hub</strong> (automated ingestion + summarization).</li>
+                  <li>Build evaluation frameworks measuring agent accuracy, safety, and latency, and run adversarial red-teaming (prompt injection, sensitive-data exposure, agent misuse) before release.</li>
+                  <li>Engineer enterprise reliability and auditability: IAM, KMS encryption, audit logging, tracing; deploy with Docker + IaC (Terraform, CloudFormation, CDK) through GitHub Actions CI/CD.</li>
                 </ul>
               </article>
             </li>
@@ -290,14 +332,14 @@
               <div class="timeline__marker" aria-hidden="true"></div>
               <article class="timeline__card">
                 <header class="timeline__head">
-                  <h3>Software Developer (Front-End &amp; Back-End)</h3>
-                  <p class="timeline__org">Paradies Lagardère</p>
-                  <p class="timeline__meta"><span>Ottawa, ON</span> · <time datetime="2024-08">Aug 2024</time> – <time datetime="2025-01">Jan 2025</time></p>
+                  <h3>Security Researcher | Bug Bounty</h3>
+                  <p class="timeline__org">HackerOne · Bugcrowd · Intigriti · Immunefi</p>
+                  <p class="timeline__meta"><span>Independent</span> · <time datetime="2023">2023</time> – present</p>
                 </header>
                 <ul class="timeline__bullets">
-                  <li>Shipped responsive UIs with React, JavaScript, HTML, and CSS.</li>
-                  <li>Built Python backends and APIs for data exchange and workflow integration.</li>
-                  <li>Debugged and maintained live apps; wrote docs for onboarding.</li>
+                  <li>Hands-on offensive testing across web, API, and cloud targets: IDOR/BOLA, SSRF, authentication/authorization bypass, and cloud misconfiguration, validated and documented end-to-end.</li>
+                  <li>Apply attacker methodology and tooling (Burp Suite, custom Python) to identify, exploit, and report vulnerabilities, then recommend remediation.</li>
+                  <li>Build LLM red-teaming harnesses measuring failure modes across agentic systems; track emerging threats, TTPs, and tooling.</li>
                 </ul>
               </article>
             </li>
@@ -305,15 +347,57 @@
               <div class="timeline__marker" aria-hidden="true"></div>
               <article class="timeline__card">
                 <header class="timeline__head">
-                  <h3>Cybersecurity Analyst &amp; Cloud Engineer</h3>
+                  <h3>IT Support Specialist</h3>
+                  <p class="timeline__org">Paradies Lagardère, Ottawa International Airport</p>
+                  <p class="timeline__meta"><span>Ottawa, ON</span> · <time datetime="2025-01">Jan 2025</time> – <time datetime="2025-08">Aug 2025</time></p>
+                </header>
+                <ul class="timeline__bullets">
+                  <li>Supported enterprise systems, endpoints, and network connectivity in a high-availability operational environment under SLA.</li>
+                  <li>Maintained endpoint security, access-control hygiene, and secure operational processes; troubleshot hardware, software, and network issues.</li>
+                </ul>
+              </article>
+            </li>
+            <li class="timeline__item">
+              <div class="timeline__marker" aria-hidden="true"></div>
+              <article class="timeline__card">
+                <header class="timeline__head">
+                  <h3>Software Engineer</h3>
+                  <p class="timeline__org">Pesapal</p>
+                  <p class="timeline__meta"><span>Fintech</span> · <time datetime="2023-04">Apr 2023</time> – <time datetime="2024-06">Jun 2024</time></p>
+                </header>
+                <ul class="timeline__bullets">
+                  <li>Shipped production software in Python and TypeScript for high-volume financial transactions in a regulated, sensitive-data environment.</li>
+                  <li>Designed and integrated REST APIs with third-party providers and internal systems, handling authentication, authorization, and reliable data exchange.</li>
+                  <li>Architected microservices and event-driven systems for performance, scalability, and reliability; applied OWASP-aligned secure coding and participated in security architecture and code reviews.</li>
+                </ul>
+              </article>
+            </li>
+            <li class="timeline__item">
+              <div class="timeline__marker" aria-hidden="true"></div>
+              <article class="timeline__card">
+                <header class="timeline__head">
+                  <h3>Cybersecurity Analyst</h3>
                   <p class="timeline__org">Laborex Solutions Ltd</p>
                   <p class="timeline__meta"><span>Nairobi, Kenya</span> · <time datetime="2023-03">Mar 2023</time> – <time datetime="2024-08">Aug 2024</time></p>
                 </header>
                 <ul class="timeline__bullets">
-                  <li>Maintained Python/Flask REST APIs with AWS (S3, IAM).</li>
-                  <li>Automated infra and deploys with CloudFormation and Python scripting.</li>
-                  <li>Monitored production, analyzed logs, and performed RCA in Linux environments.</li>
-                  <li>Ran vulnerability assessments; contributed to secure design and documentation.</li>
+                  <li>Monitored enterprise environments with SIEM tooling for threat detection, triage, and incident response; led investigations and root-cause analysis.</li>
+                  <li>Ran vulnerability assessments with Nessus and delivered prioritized remediation tracked to closure across cloud and application systems.</li>
+                  <li>Implemented security controls (IAM, VPN/zero-trust, endpoint protection, encryption) and mapped them to NIST CSF and ISO 27001 for audit readiness.</li>
+                </ul>
+              </article>
+            </li>
+            <li class="timeline__item">
+              <div class="timeline__marker" aria-hidden="true"></div>
+              <article class="timeline__card">
+                <header class="timeline__head">
+                  <h3>Cybersecurity Intern &amp; IT Specialist</h3>
+                  <p class="timeline__org">Potterhouse School</p>
+                  <p class="timeline__meta"><span>Kenya</span> · <time datetime="2021-06">Jun 2021</time> – <time datetime="2022-12">Dec 2022</time></p>
+                </header>
+                <ul class="timeline__bullets">
+                  <li>Deployed and maintained servers, networks, and enterprise IT infrastructure, including AWS deployments and secure data storage.</li>
+                  <li>Delivered cybersecurity awareness training and hands-on technical support to staff.</li>
                 </ul>
               </article>
             </li>
@@ -330,17 +414,17 @@
             </header>
             <ul class="edu-list">
               <li>
-                <h3>Cloud Development, Post-Graduate Certificate</h3>
+                <h3>Cloud Development Diploma</h3>
                 <p>Algonquin College, Ottawa, ON · <time datetime="2025">2025</time>–<time datetime="2026">2026</time> (ongoing)</p>
                 <p class="edu-list__note">Cloud architecture, serverless, Docker, Kubernetes, CI/CD</p>
               </li>
               <li>
-                <h3>Cybersecurity Analysis, Post-Graduate Certificate</h3>
-                <p>Algonquin College · <time datetime="2024">2024</time>–<time datetime="2025">2025</time> · GPA 3.8/4.0</p>
+                <h3>Cybersecurity Analysis, Graduate Certificate</h3>
+                <p>Algonquin College · <time datetime="2024">2024</time>–<time datetime="2025">2025</time> · GPA 3.3/4.0</p>
               </li>
               <li>
                 <h3>Bachelor of Science, Information Technology</h3>
-                <p>United States International University–Africa · <time datetime="2022">2022</time></p>
+                <p>United States International University–Africa · <time datetime="2022">2022</time> · GPA 3.5/4.0</p>
               </li>
             </ul>
           </div>
@@ -352,8 +436,8 @@
             <ul class="cert-list">
               <li>AWS Certified Cloud Practitioner</li>
               <li>Certified Ethical Hacker (CEH)</li>
-              <li>Cisco CCNA</li>
-              <li>CompTIA Security+ <span class="cert-list__pending">(in progress)</span></li>
+              <li>AWS Solutions Architect – Associate <span class="cert-list__pending">(in progress)</span></li>
+              <li>Cisco CCNA <span class="cert-list__pending">(in progress)</span></li>
             </ul>
           </div>
         </div>
@@ -381,6 +465,6 @@
       </div>
     </footer>
 
-    <script src="js/main.js" defer></script>
+    <script src="js/main.js?v=20260716-1145" defer></script>
   </body>
 </html>

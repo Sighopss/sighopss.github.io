@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Live simulation of VIBE, a Bedrock AgentCore multi-agent pipeline with Slack human-in-the-loop gates, visualized as a real-time process map." />
+<meta name="theme-color" content="#070708" />
+<title>VIBE: Live Process Map · Trevor Kutto</title>
+<script>
+  if (new URLSearchParams(window.location.search).get('embed') === '1') {
+    document.documentElement.classList.add('is-embedded');
+  }
+</script>
+<style>
+  :root {
+    --bg: #070708;
+    --text: #e8e8ea;
+    --text-muted: #9a9aa3;
+    --accent: #7dd3fc;
+    --border: rgba(255, 255, 255, 0.09);
+    --font-sans: "DM Sans", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    min-height: 100vh;
+    min-height: 100dvh;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page {
+    width: 100%;
+    max-width: 1400px;
+    height: 100vh;
+    height: 100dvh;
+    margin: 0 auto;
+    padding: 14px 20px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  html.is-embedded .page { max-width: none; padding: 0; }
+  html.is-embedded .top { display: none; }
+  html.is-embedded .frame { border: 0; border-radius: 0; box-shadow: none; }
+
+  .top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .top a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 13px;
+  }
+  .top a:hover { color: var(--accent); }
+  .top h1 {
+    font-size: 18px;
+    margin: 0;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+  .top .sub {
+    margin: 2px 0 0;
+    font-size: 12.5px;
+    color: var(--text-muted);
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #34d399;
+    border: 1px solid rgba(52, 211, 153, 0.35);
+    border-radius: 999px;
+    padding: 4px 10px;
+    text-transform: uppercase;
+  }
+  .badge i {
+    width: 7px; height: 7px; border-radius: 999px; background: #34d399;
+    animation: ping 1.4s ease-out infinite;
+  }
+  @keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(52,211,153,.5);} 70% { box-shadow: 0 0 0 7px transparent;} 100% { box-shadow: 0 0 0 0 transparent;} }
+
+  /* Browser-chrome frame */
+  .frame {
+    flex: 1 1 auto;
+    min-height: 0;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    background: #101012;
+    box-shadow: 0 24px 80px rgba(0,0,0,.45);
+    display: flex;
+    flex-direction: column;
+  }
+  .chrome {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 12px;
+    background: #1a1a1e;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+  }
+  .chrome .dots { display: flex; gap: 6px; }
+  .chrome .dots i { width: 10px; height: 10px; border-radius: 999px; display: block; }
+  .chrome .dots i:nth-child(1) { background: #ff5f57; }
+  .chrome .dots i:nth-child(2) { background: #febc2e; }
+  .chrome .dots i:nth-child(3) { background: #28c840; }
+  .chrome .url {
+    flex: 1; text-align: center;
+    font-size: 11.5px; color: #8b8b93;
+    background: rgba(255,255,255,.05);
+    border-radius: 7px; padding: 4px 12px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+
+  /* ===== VibeOffice map (ported) ===== */
+  .vo-app { flex: 1 1 auto; min-height: 0; background: #f4f1ea; color: #1a1a1a; font-family: 'Segoe UI', system-ui, sans-serif; display: flex; flex-direction: column; overflow: hidden; }
+  .vo-now {
+    display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+    padding: 9px 16px;
+    background: #1e3a5f; color: #f8fafc;
+  }
+  .vo-now__label {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+    opacity: .9; white-space: nowrap;
+  }
+  .vo-now__pulse { width: 8px; height: 8px; border-radius: 999px; background: #34d399; animation: ping 1.4s ease-out infinite; }
+  .vo-now__headline { font-size: 13px; font-weight: 700; }
+  .vo-now__detail { font-size: 11px; opacity: .85; }
+  .vo-chips { margin-left: auto; display: flex; gap: 14px; font-size: 11.5px; opacity: .95; white-space: nowrap; }
+  .vo-chips b.live { color: #93c5fd; } .vo-chips b.wait { color: #fbbf24; } .vo-chips b.done { color: #86efac; }
+
+  .vo-scale { position: relative; flex: 1 1 auto; min-height: 0; overflow: hidden; }
+  .vo-stage {
+    position: relative; width: 1200px; height: 710px;
+    transform-origin: top left;
+    opacity: 0;
+  }
+  .vo-stage.is-ready {
+    opacity: 1;
+    transition: opacity 140ms cubic-bezier(.22,1,.36,1);
+    background-image: radial-gradient(#c8c0b0 1px, transparent 1px);
+    background-size: 18px 18px;
+    background-color: #f4f1ea;
+  }
+  .vo-stage svg.lanes, .vo-stage svg.edges { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .vo-stage svg.lanes { pointer-events: none; }
+  .vo-stage svg.edges { overflow: visible; pointer-events: none; }
+  .vo-lane-label { font-size: 9px; font-weight: 700; letter-spacing: .04em; }
+  .vo-lane-hint { font-size: 7px; fill: #a8a29e; }
+
+  .vo-rail__bloom { fill: none; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; display: none; }
+  .vo-rail__pad { fill: none; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+  .vo-rail__core { fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .vo-rail__sweep { fill: none; stroke-width: 2.75; stroke-linecap: round; display: none; }
+  .vo-rail__particle { display: none; }
+
+  .vo-rail--live .vo-rail__bloom { display: block; stroke: #93c5fd; opacity: .35; filter: blur(2.2px); }
+  .vo-rail--live .vo-rail__pad { stroke: #dbeafe; }
+  .vo-rail--live .vo-rail__core { stroke: #3b82f6; opacity: .65; }
+  .vo-rail--live .vo-rail__sweep { display: block; }
+  .vo-rail--live .vo-rail__particle { display: block; }
+
+  .vo-rail--wait .vo-rail__bloom { display: block; stroke: #fbbf24; opacity: .32; filter: blur(2.2px); }
+  .vo-rail--wait .vo-rail__pad { stroke: #fef3c7; stroke-width: 7; }
+  .vo-rail--wait .vo-rail__core { stroke: #d97706; stroke-width: 3; opacity: .9; animation: vo-breathe 2s ease-in-out infinite; }
+  .vo-rail--wait .vo-rail__particle { display: block; fill: #d97706; }
+
+  .vo-rail--done .vo-rail__bloom { display: block; stroke: #86efac; opacity: .22; stroke-width: 6; filter: blur(2.2px); }
+  .vo-rail--done .vo-rail__pad { stroke: #dcfce7; }
+  .vo-rail--done .vo-rail__core { stroke: #16a34a; opacity: .7; }
+
+  .vo-rail--future .vo-rail__pad { stroke: #e2e8f0; }
+  .vo-rail--future .vo-rail__core { stroke: #94a3b8; opacity: .45; stroke-dasharray: 4 5; }
+
+  @keyframes vo-breathe { 0%,100% { opacity: .4; } 50% { opacity: .9; } }
+
+  .vo-pill-bg { fill: #fff; stroke-width: 1.5; filter: drop-shadow(0 1px 2px rgba(0,0,0,.13)); }
+  .vo-pill-text { font-size: 10px; font-weight: 700; letter-spacing: .01em; }
+  .vo-rail--live .vo-pill-bg { stroke: #2563eb; } .vo-rail--live .vo-pill-text { fill: #1e40af; }
+  .vo-rail--wait .vo-pill-bg { stroke: #d97706; } .vo-rail--wait .vo-pill-text { fill: #92400e; }
+  .vo-rail--done .vo-pill-bg { stroke: #16a34a; } .vo-rail--done .vo-pill-text { fill: #166534; }
+  .vo-rail--future .vo-pill-bg { stroke: #94a3b8; } .vo-rail--future .vo-pill-text { fill: #475569; }
+
+  .vo-node {
+    position: absolute;
+    background: #fff;
+    border: 1px solid #bdb5a6;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.07);
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    transition: border-color .25s ease, box-shadow .25s ease, opacity .25s ease;
+  }
+  .vo-node.is-idle, .vo-node.is-queued { opacity: .55; }
+  .vo-node.is-live { border: 2px solid #2563eb; box-shadow: 0 0 0 4px rgba(37,99,235,.13), 0 4px 16px rgba(0,0,0,.12); opacity: 1; z-index: 3; }
+  .vo-node.is-waiting { border: 2px solid #d97706; box-shadow: 0 0 0 4px rgba(217,119,6,.13); opacity: 1; z-index: 3; }
+  .vo-node.is-done { opacity: 1; }
+
+  .vo-node__header {
+    color: #fff; font-size: 9px; font-weight: 700; letter-spacing: .05em;
+    padding: 4px 8px; display: flex; justify-content: space-between; gap: 6px; align-items: center; flex-shrink: 0;
+  }
+  .vo-node__header > span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2; }
+  .vo-node--client .vo-node__header { background: #8b6914; }
+  .vo-node--human .vo-node__header { background: #c45c26; }
+  .vo-node--ai .vo-node__header { background: #c0392b; }
+  .vo-node--service .vo-node__header { background: #2563eb; }
+  .vo-node--output .vo-node__header { background: #2d6a4f; }
+  .vo-node.is-done.vo-node--client .vo-node__header { background: #2d6a4f; }
+  .vo-node__live-dot { width: 6px; height: 6px; border-radius: 999px; background: #93c5fd; animation: ping 1.2s ease-out infinite; flex-shrink: 0; display: none; }
+  .vo-node.is-live .vo-node__live-dot { display: block; }
+
+  .vo-node__body { padding: 8px 10px 6px; flex: 1; display: flex; flex-direction: column; min-height: 0; }
+  .vo-node__title { font-size: 13px; font-weight: 700; line-height: 1.2; }
+  .vo-node__sub { font-size: 10px; line-height: 1.3; color: #666; margin-top: 2px; }
+  .vo-node__activity {
+    min-width: 0; color: #1e40af; font-size: 10px; font-weight: 600; line-height: 1.35;
+    overflow-wrap: anywhere; text-wrap: pretty;
+  }
+  .vo-node__activity.muted { color: #57534e; margin-top: 6px; font-weight: 500; }
+  .vo-node__activity.done { color: #166534; }
+  .vo-node__activity.wait { color: #9a3412; }
+
+  .vo-cast {
+    display: none; align-items: flex-start; gap: 7px; min-width: 0;
+    margin-top: 8px; padding-top: 7px; border-top: 1px solid #e2e8f0;
+  }
+  .vo-node.has-activity .vo-cast { display: flex; }
+  .vo-node.has-activity .vo-node__sub { display: none; }
+  .vo-status-dot {
+    width: 7px; height: 7px; margin-top: 3px; border-radius: 50%; flex: 0 0 auto;
+    background: #2563eb;
+  }
+  .vo-node.is-live .vo-status-dot { box-shadow: 0 0 0 3px rgba(37,99,235,.12); }
+  .vo-node.is-waiting .vo-status-dot { background: #d97706; box-shadow: 0 0 0 3px rgba(217,119,6,.12); }
+  .vo-node.is-done .vo-status-dot { background: #16a34a; }
+  .vo-cast__meta { min-width: 0; flex: 1; }
+
+  /* Client intake uses a dedicated layout so status changes never clip its copy. */
+  .vo-node--client { border-radius: 8px; box-shadow: 0 3px 12px rgba(0,0,0,.1); }
+  .vo-node--client .vo-node__body { padding: 10px 14px 12px; }
+  .vo-node--client .vo-node__title { font-size: 15px; line-height: 1.15; }
+  .vo-node--client .vo-node__sub { display: block !important; margin-top: 4px; font-size: 11px; line-height: 1.35; }
+  .vo-intake-status {
+    display: none; align-items: center; gap: 6px; align-self: flex-start;
+    margin-top: auto; padding: 4px 8px; border: 1px solid #bbf7d0; border-radius: 999px;
+    background: #f0fdf4; color: #166534; font-size: 10px; font-weight: 700; line-height: 1.2;
+  }
+  .vo-intake-status::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #16a34a; flex: 0 0 auto; }
+  .vo-who { margin-top: 4px; font-size: 10px; font-weight: 600; line-height: 1.3; color: #1e3a8a; min-width: 0; }
+  .vo-who-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+
+  /* Deliverables tiles */
+  .vo-out { display: flex; gap: 8px; margin-top: 6px; min-width: 0; }
+  .vo-out__tile { flex: 1; min-width: 0; border: 1px solid #e7e5e4; border-radius: 6px; padding: 5px 8px 6px; background: #fafaf9; display: flex; flex-direction: column; gap: 1px; transition: border-color .25s, background .25s; }
+  .vo-out__head { display: flex; align-items: center; gap: 5px; min-width: 0; }
+  .vo-out__dot { width: 8px; height: 8px; border-radius: 999px; background: #cbd5e1; flex-shrink: 0; }
+  .vo-out__name { font-size: 10px; font-weight: 700; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .vo-out__state { font-size: 9px; line-height: 1.3; color: #78716c; white-space: nowrap; }
+  .vo-out__tile.is-ready { border-color: rgba(22,163,74,.4); background: #f0fdf4; }
+  .vo-out__tile.is-ready .vo-out__dot { background: #16a34a; }
+  .vo-out__tile.is-ready .vo-out__state { color: #166534; font-weight: 700; }
+  .vo-out__tile.is-building { border-color: rgba(37,99,235,.4); background: #eff6ff; }
+  .vo-out__tile.is-building .vo-out__dot { background: #2563eb; animation: ping 1.2s ease-out infinite; }
+  .vo-out__tile.is-building .vo-out__state { color: #1e40af; font-weight: 600; }
+
+  .vo-legend {
+    display: flex; gap: 14px; flex-wrap: wrap; align-items: center;
+    padding: 7px 16px 8px;
+    background: #f4f1ea; color: #444; font-size: 10px;
+    border-top: 1px solid #e7e0d2;
+  }
+  .vo-leg { display: inline-block; width: 16px; height: 3px; border-radius: 2px; margin-right: 5px; vertical-align: middle; }
+  .vo-leg--done { background: #16a34a; }
+  .vo-leg--wait { background: #d97706; }
+  .vo-leg--live { background: #2563eb; }
+  .vo-leg--future { border-top: 2px dashed #94a3b8; height: 0; background: transparent; }
+  .vo-legend .note { margin-left: auto; color: #8b6914; }
+
+  /* Event feed */
+  .vo-feed { flex: 0 0 52px; overflow: hidden; background: #faf8f4; border-top: 1px solid #e7e0d2; padding: 5px 16px 6px; }
+  .vo-feed h2 { margin: 0 0 3px; font-size: 9px; letter-spacing: .05em; text-transform: uppercase; color: #666; }
+  .vo-feed ul { list-style: none; margin: 0; padding: 0; }
+  .vo-feed li { display: grid; grid-template-columns: 4.4rem 4.2rem 1fr; gap: .5rem; padding: 1px 0; border-bottom: 1px solid #ece7de; font-size: 10px; color: #333; }
+  .vo-feed li:last-child { border-bottom: 0; }
+  .vo-feed li:nth-child(n+2) { display: none; }
+  .vo-feed .t { font-family: ui-monospace, monospace; font-size: 10px; color: #888; }
+  .vo-feed .k { font-size: 9px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+  .vo-feed .k.status { color: #c0392b; } .vo-feed .k.file { color: #2d6a4f; } .vo-feed .k.hitl { color: #c45c26; } .vo-feed .k.log { color: #2563eb; }
+  .vo-feed .x { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .foot { display: none; }
+  .foot a { color: var(--accent); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vo-now__pulse, .badge i, .vo-node__live-dot, .vo-out__tile.is-building .vo-out__dot,
+    .vo-rail--wait .vo-rail__core, .vo-rail__sweep { animation: none !important; }
+    .vo-stage.is-ready { transition: none; }
+    .vo-rail__particle { display: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="top">
+    <div>
+      <h1>VIBE: Live Process Map</h1>
+      <p class="sub">Bedrock AgentCore multi-agent pipeline · Slack human-in-the-loop · real-time WebSocket telemetry</p>
+    </div>
+    <span class="badge"><i></i> Live simulation</span>
+    <a href="../../index.html#projects">← Back to portfolio</a>
+  </div>
+
+  <div class="frame">
+    <div class="chrome">
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="url">vibe-office / live process map (simulated replay of the production dashboard)</span>
+    </div>
+    <div class="vo-app">
+      <div class="vo-now">
+        <span class="vo-now__label"><span class="vo-now__pulse"></span> Right now</span>
+        <span class="vo-now__headline" id="story-head">Warming up…</span>
+        <span class="vo-now__detail" id="story-detail"></span>
+        <span class="vo-chips"><span><b class="live" id="c-live">0</b> working</span><span><b class="wait" id="c-wait">0</b> waiting on human</span><span><b class="done" id="c-done">0</b> delivered</span></span>
+      </div>
+      <div class="vo-scale" id="scaler">
+        <div class="vo-stage" id="stage"></div>
+      </div>
+      <div class="vo-legend">
+        <span><i class="vo-leg vo-leg--live"></i>work moving</span>
+        <span><i class="vo-leg vo-leg--wait"></i>needs a person</span>
+        <span><i class="vo-leg vo-leg--done"></i>finished</span>
+        <span><i class="vo-leg vo-leg--future"></i>not started</span>
+        <span class="note">Simulated run · mirrors the production state machine</span>
+      </div>
+      <div class="vo-feed">
+        <h2>Event stream</h2>
+        <ul id="feed"></ul>
+      </div>
+    </div>
+  </div>
+
+  <p class="foot">
+    This is a faithful, self-contained replay of the <strong>VIBE</strong> admin dashboard's live map. In production the
+    same component is driven by real WebSocket events and S3 artifact evidence from an AWS pipeline: client intake →
+    Slack approval → Bedrock agents (Research → Citation check → Strategy → Technical) → human report review in Slack →
+    presentation deck &amp; structured outputs. Built with React + TypeScript, Lambda, DynamoDB, API Gateway WebSockets
+    and Amplify Hosting. <a href="../../index.html#projects">More projects →</a>
+  </p>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  // ===== Widescreen snake geometry (mirrors the production process flow) =====
+  var NODES = [
+    { id: 'intake', kind: 'client', title: 'Client form', sub: 'Company details come in here', x: 120, y: 6, w: 220, h: 100, head: 'CLIENT' },
+    { id: 'intake_hitl', kind: 'human', title: 'Accept intake?', sub: 'A person says yes or no', x: 140, y: 155, w: 180, h: 100, head: 'HUMAN' },
+    { id: 'research', kind: 'ai', title: 'Research dig', sub: 'Looks up the company & sources', x: 380, y: 305, w: 170, h: 100, head: 'AI' },
+    { id: 'validation', kind: 'service', title: 'Citation check', sub: 'Double-checks the sources', x: 380, y: 455, w: 170, h: 100, head: 'CHECK' },
+    { id: 'strategy', kind: 'ai', title: 'Strategy', sub: 'Writes the plan from research', x: 700, y: 455, w: 170, h: 100, head: 'AI' },
+    { id: 'technical', kind: 'ai', title: 'Technical', sub: 'Turns the plan into steps', x: 700, y: 305, w: 170, h: 100, head: 'AI' },
+    { id: 'human_gate', kind: 'human', title: 'Report review', sub: 'Person reviews the PDF in Slack', x: 700, y: 155, w: 170, h: 100, head: 'HUMAN' },
+    { id: 'presentation', kind: 'output', title: 'Deliverables', sub: 'What the client receives', x: 600, y: 575, w: 550, h: 125, head: 'OUTPUT' }
+  ];
+  var EDGES = [
+    { id: 'e1', from: 'intake', fp: 'bottom', to: 'intake_hitl', tp: 'top', label: 'Needs approval', at: { x: 230, y: 130 } },
+    { id: 'e2', from: 'intake_hitl', fp: 'bottom', to: 'research', tp: 'left', label: 'Approved form', at: { x: 230, y: 280 } },
+    { id: 'e3', from: 'research', fp: 'bottom', to: 'validation', tp: 'top', label: 'Sources', at: { x: 465, y: 430 } },
+    { id: 'e4', from: 'validation', fp: 'right', to: 'strategy', tp: 'left', label: 'Verified', at: { x: 625, y: 505 } },
+    { id: 'e5', from: 'strategy', fp: 'top', to: 'technical', tp: 'bottom', label: 'Plan', at: { x: 785, y: 430 } },
+    { id: 'e6', from: 'technical', fp: 'top', to: 'human_gate', tp: 'bottom', label: 'Draft report', at: { x: 785, y: 280 } },
+    { id: 'e7', from: 'human_gate', fp: 'right', to: 'presentation', tp: 'top', toAt: { x: 1050, y: 575 }, label: 'Approved deck', at: { x: 1050, y: 430 } }
+  ];
+  var LANES = [
+    { label: 'CLIENT', hint: 'starts it', y: 0, h: 125, fill: '#faf8f4', ink: '#78716c' },
+    { label: 'HUMAN', hint: 'approves', y: 125, h: 155, fill: '#fff7ed', ink: '#c45c26' },
+    { label: 'AI TEAM', hint: 'does the work', y: 280, h: 285, fill: '#eff6ff', ink: '#2563eb' },
+    { label: 'OUTPUT', hint: 'deliverable', y: 565, h: 145, fill: '#ecfdf5', ink: '#2d6a4f' }
+  ];
+  var W = 1200, H = 710, PILL_H = 22;
+
+  function port(n, p) {
+    if (p === 'left') return { x: n.x, y: n.y + n.h / 2 };
+    if (p === 'right') return { x: n.x + n.w, y: n.y + n.h / 2 };
+    if (p === 'top') return { x: n.x + n.w / 2, y: n.y };
+    return { x: n.x + n.w / 2, y: n.y + n.h };
+  }
+  function pathFor(f, t, fp, tp) {
+    if ((fp === 'bottom' && tp === 'top') || (fp === 'top' && tp === 'bottom')) {
+      if (Math.abs(f.x - t.x) < 1) return 'M ' + f.x + ' ' + f.y + ' V ' + t.y;
+      var m = (f.y + t.y) / 2;
+      return 'M ' + f.x + ' ' + f.y + ' V ' + m + ' H ' + t.x + ' V ' + t.y;
+    }
+    if (fp === 'bottom' && (tp === 'left' || tp === 'right')) return 'M ' + f.x + ' ' + f.y + ' V ' + t.y + ' H ' + t.x;
+    if ((fp === 'left' || fp === 'right') && (tp === 'top' || tp === 'bottom')) return 'M ' + f.x + ' ' + f.y + ' H ' + t.x + ' V ' + t.y;
+    if ((fp === 'right' && tp === 'left') || (fp === 'left' && tp === 'right')) {
+      if (Math.abs(f.y - t.y) < 1) return 'M ' + f.x + ' ' + f.y + ' H ' + t.x;
+      var mx = (f.x + t.x) / 2;
+      return 'M ' + f.x + ' ' + f.y + ' H ' + mx + ' V ' + t.y + ' H ' + t.x;
+    }
+    var mx2 = (f.x + t.x) / 2;
+    return 'M ' + f.x + ' ' + f.y + ' H ' + mx2 + ' V ' + t.y + ' H ' + t.x;
+  }
+  function pillW(label) { return Math.min(160, Math.max(84, Math.ceil(label.length * 6.2) + 28)); }
+
+
+  // ===== Build static DOM =====
+  var stage = document.getElementById('stage');
+  var lanesSvg = '<svg class="lanes" viewBox="0 0 ' + W + ' ' + H + '">';
+  LANES.forEach(function (l) {
+    lanesSvg += '<rect x="0" y="' + l.y + '" width="' + W + '" height="' + l.h + '" fill="' + l.fill + '"/>' +
+      '<text x="12" y="' + (l.y + 28) + '" class="vo-lane-label" fill="' + l.ink + '">' + l.label + '</text>' +
+      '<text x="12" y="' + (l.y + 42) + '" class="vo-lane-hint">' + l.hint + '</text>';
+  });
+  lanesSvg += '<line x1="96" y1="0" x2="96" y2="' + H + '" stroke="#e7e5e4"/></svg>';
+
+  var byId = {};
+  NODES.forEach(function (n) { byId[n.id] = n; });
+
+  var edgesSvg = '<svg class="edges" viewBox="0 0 ' + W + ' ' + H + '"><defs>' +
+    '<linearGradient id="sweep" x1="0" y1="0" x2="1" y2="0">' +
+    '<stop offset="0%" stop-color="#2563eb" stop-opacity="0"/><stop offset="50%" stop-color="#60a5fa" stop-opacity="1"/><stop offset="100%" stop-color="#2563eb" stop-opacity="0"/>' +
+    '<animate attributeName="x1" values="-1;1" dur="1.6s" repeatCount="indefinite"/><animate attributeName="x2" values="0;2" dur="1.6s" repeatCount="indefinite"/>' +
+    '</linearGradient></defs>';
+  EDGES.forEach(function (e) {
+    var f = port(byId[e.from], e.fp);
+    var t = e.toAt || port(byId[e.to], e.tp);
+    var d = pathFor(f, t, e.fp, e.tp);
+    var w = pillW(e.label);
+    edgesSvg += '<g id="' + e.id + '" class="vo-rail vo-rail--future">' +
+      '<path class="vo-rail__bloom" d="' + d + '"/>' +
+      '<path class="vo-rail__pad" d="' + d + '"/>' +
+      '<path class="vo-rail__core" d="' + d + '"/>' +
+      '<path class="vo-rail__sweep" stroke="url(#sweep)" d="' + d + '"/>' +
+      '<circle class="vo-rail__particle" r="3.2" fill="#2563eb"><animateMotion dur="1.7s" repeatCount="indefinite" path="' + d.replace(/^M /, 'M') + '"/></circle>' +
+      '<circle class="vo-rail__particle" r="2.4" fill="#60a5fa" opacity=".85"><animateMotion dur="1.7s" begin=".85s" repeatCount="indefinite" path="' + d.replace(/^M /, 'M') + '"/></circle>' +
+      '<rect class="vo-pill-bg" x="' + (e.at.x - w / 2) + '" y="' + (e.at.y - PILL_H / 2) + '" width="' + w + '" height="' + PILL_H + '" rx="' + PILL_H / 2 + '"/>' +
+      '<text class="vo-pill-text" x="' + e.at.x + '" y="' + (e.at.y + 3.5) + '" text-anchor="middle">' + e.label + '</text>' +
+      '</g>';
+  });
+  edgesSvg += '</svg>';
+
+  var nodesHtml = '';
+  NODES.forEach(function (n) {
+    var tiles = '';
+    if (n.id === 'presentation') {
+      tiles = '<div class="vo-out">' +
+        ['report|Report PDF', 'deck|Presentation deck', 'data|Run data'].map(function (t) {
+          var p = t.split('|');
+          return '<div class="vo-out__tile" data-tile="' + p[0] + '"><div class="vo-out__head"><span class="vo-out__dot"></span><span class="vo-out__name">' + p[1] + '</span></div><span class="vo-out__state">Pending</span></div>';
+        }).join('') + '</div>';
+    }
+    nodesHtml += '<div class="vo-node vo-node--' + n.kind + ' is-idle" id="n-' + n.id + '" style="left:' + n.x + 'px;top:' + n.y + 'px;width:' + n.w + 'px;height:' + n.h + 'px">' +
+      '<div class="vo-node__header"><span data-h>' + n.head + '</span><span class="vo-node__live-dot"></span></div>' +
+      '<div class="vo-node__body">' +
+      '<div class="vo-node__title">' + n.title + '</div>' +
+      '<div class="vo-node__sub">' + n.sub + '</div>' +
+      (n.id === 'presentation' ? tiles : n.id === 'intake'
+        ? '<div class="vo-intake-status" data-note style="display:none"></div>'
+        : '<div class="vo-cast"><span class="vo-status-dot" aria-hidden="true"></span><div class="vo-cast__meta">' +
+          '<div class="vo-node__activity" data-act></div>' +
+          '</div></div><div class="vo-node__activity muted" data-note style="display:none"></div>') +
+      (n.id === 'presentation' ? '<div class="vo-who" style="margin-top:5px"><span class="vo-who-name" data-who>What the client receives</span></div>' : '') +
+      '</div></div>';
+  });
+
+  stage.innerHTML = lanesSvg + edgesSvg + nodesHtml;
+
+  // ===== Responsive scaling =====
+  var scaler = document.getElementById('scaler');
+  function rescale() {
+    var w = scaler.clientWidth;
+    var h = scaler.clientHeight;
+    if (!w || !h) return;
+    var s = Math.min(1.4, w / W, h / H);
+    stage.style.transform = 'scale(' + s + ')';
+    stage.style.left = Math.max(0, (w - W * s) / 2) + 'px';
+    if (!stage.classList.contains('is-ready')) {
+      requestAnimationFrame(function () { stage.classList.add('is-ready'); });
+    }
+  }
+  window.addEventListener('resize', rescale);
+  if ('ResizeObserver' in window) new ResizeObserver(rescale).observe(scaler);
+  rescale();
+
+  // ===== Simulation =====
+  var ORGS = ['Northwind Robotics', 'Bluefin Analytics', 'Maple & Main Retail', 'Aurora Health Group', 'Cascade Logistics', 'Harbor Lane Studios'];
+  var orgIdx = 0, execN = 4096, delivered = 0;
+  var feedEl = document.getElementById('feed');
+
+  function now() {
+    var d = new Date();
+    function z(n) { return (n < 10 ? '0' : '') + n; }
+    return z(d.getHours()) + ':' + z(d.getMinutes()) + ':' + z(d.getSeconds());
+  }
+  function feed(kind, text) {
+    var li = document.createElement('li');
+    li.innerHTML = '<span class="t">' + now() + '</span><span class="k ' + kind + '">' + kind + '</span><span class="x"></span>';
+    li.querySelector('.x').textContent = text;
+    feedEl.insertBefore(li, feedEl.firstChild);
+    while (feedEl.children.length > 7) feedEl.removeChild(feedEl.lastChild);
+  }
+
+  function setNode(id, mode, opts) {
+    opts = opts || {};
+    var el = document.getElementById('n-' + id);
+    var n = byId[id];
+    var hasActivity = Boolean(opts.activity);
+    el.className = 'vo-node vo-node--' + n.kind + ' is-' + mode + (hasActivity ? ' has-activity' : '');
+    var chip = mode === 'live' ? 'WORKING' : mode === 'waiting' ? 'WAIT' : mode === 'done' ? 'DONE' : mode === 'queued' ? 'NEXT' : null;
+    el.querySelector('[data-h]').textContent = n.head + (chip ? ' · ' + chip : '');
+
+    var act = el.querySelector('[data-act]');
+    if (act) {
+      act.textContent = opts.activity || '';
+      act.className = 'vo-node__activity' + (mode === 'waiting' ? ' wait' : mode === 'done' ? ' done' : '');
+    }
+
+    var note = el.querySelector('[data-note]');
+    if (note) {
+      if ((mode === 'idle' || mode === 'queued') && opts.note) { note.style.display = 'block'; note.textContent = opts.note; }
+      else note.style.display = 'none';
+    }
+  }
+  function setEdge(id, life) {
+    var g = document.getElementById(id);
+    g.setAttribute('class', 'vo-rail vo-rail--' + life);
+  }
+  function setTile(key, state, label) {
+    var t = stage.querySelector('[data-tile="' + key + '"]');
+    t.className = 'vo-out__tile' + (state ? ' is-' + state : '');
+    t.querySelector('.vo-out__state').textContent = label;
+  }
+  function story(head, detail) {
+    document.getElementById('story-head').textContent = head;
+    document.getElementById('story-detail').textContent = detail;
+  }
+  function chips(live, wait) {
+    document.getElementById('c-live').textContent = live;
+    document.getElementById('c-wait').textContent = wait;
+    document.getElementById('c-done').textContent = delivered;
+  }
+
+  function resetAll(keepIntakeComplete) {
+    ['intake', 'intake_hitl', 'research', 'validation', 'strategy', 'technical', 'human_gate', 'presentation'].forEach(function (id) {
+      setNode(id, 'idle');
+    });
+    ['e1', 'e2', 'e3', 'e4', 'e5', 'e6', 'e7'].forEach(function (id) { setEdge(id, 'future'); });
+    setTile('report', '', 'Pending'); setTile('deck', '', 'Pending'); setTile('data', '', 'Pending');
+    if (keepIntakeComplete) {
+      setNode('intake', 'done', {});
+      var intakeNote = document.querySelector('#n-intake [data-note]');
+      intakeNote.style.display = 'block';
+      intakeNote.textContent = 'Form received ✓';
+    }
+  }
+
+  // Phase table: [duration ms, apply()]
+  function runCycle() {
+    var org = ORGS[orgIdx % ORGS.length]; orgIdx++;
+    execN++;
+    var tag = org + ' · #exec-' + execN.toString(16);
+    var actTimer = null;
+
+    function rotate(nodeId, lines) {
+      var i = 0;
+      clearInterval(actTimer);
+      actTimer = setInterval(function () {
+        i = (i + 1) % lines.length;
+        var el = document.getElementById('n-' + nodeId);
+        var act = el && el.querySelector('[data-act]');
+        if (act) act.textContent = lines[i];
+      }, 2400);
+    }
+
+    var phases = [
+      [4600, function () {
+        resetAll(true);
+        setNode('intake_hitl', 'waiting', { activity: '1 waiting in Slack', who: '' });
+        setEdge('e1', 'wait');
+        story(org + ': intake form waiting for approval', 'A reviewer accepts or rejects in Slack');
+        chips(0, 1);
+        feed('hitl', org + ': intake form posted to Slack');
+      }],
+      [8800, function () {
+        resetAll(true);
+        setNode('research', 'live', { activity: 'Looking up sources…', who: tag });
+        setEdge('e1', 'done'); setEdge('e2', 'live'); setEdge('e3', 'live');
+        var vEl = document.getElementById('n-validation');
+        setNode('validation', 'queued', { note: 'Up next' });
+        story(org + ': Research dig is looking up sources', 'Next: Citation check verifies the sources · Then Strategy writes the plan');
+        chips(1, 0);
+        feed('status', org + ': intake approved; pipeline started');
+        feed('log', 'research agent: gathering filings, news, competitors…');
+        rotate('research', ['Looking up sources…', 'Reading company filings…', 'Mapping the competitive field…', 'Collecting citations…']);
+      }],
+      [6200, function () {
+        resetAll(true);
+        setNode('validation', 'live', { activity: 'Checking citations…', who: tag });
+        setEdge('e2', 'done'); setEdge('e3', 'done'); setEdge('e4', 'live');
+        setNode('strategy', 'queued', { note: 'Up next' });
+        story(org + ': Citation check is verifying the sources', 'Next: Strategy writes the plan from the verified research');
+        chips(1, 0);
+        feed('file', 'research_output.json landed in S3');
+        rotate('validation', ['Checking citations…', 'Scoring source coverage…', 'Flagging weak references…']);
+      }],
+      [8200, function () {
+        resetAll(true);
+        setNode('strategy', 'live', { activity: 'Writing the plan…', who: tag });
+        setEdge('e4', 'done'); setEdge('e5', 'live');
+        setNode('technical', 'queued', { note: 'Up next' });
+        story(org + ': Strategy is writing the plan', 'Next: Technical turns the plan into steps');
+        chips(1, 0);
+        feed('file', 'strategy_validation_result.json landed in S3');
+        rotate('strategy', ['Writing the plan…', 'Sizing the opportunities…', 'Drafting recommendations…', 'Estimating ROI…']);
+      }],
+      [7600, function () {
+        resetAll(true);
+        setNode('technical', 'live', { activity: 'Building the steps…', who: tag });
+        setEdge('e5', 'done'); setEdge('e6', 'live');
+        setNode('human_gate', 'queued', { note: 'Up next' });
+        story(org + ': Technical is turning the plan into steps', 'Next: the draft report goes to human review in Slack');
+        chips(1, 0);
+        feed('file', 'strategy_output.json landed in S3');
+        rotate('technical', ['Building the steps…', 'Choosing the stack…', 'Writing the roadmap…']);
+      }],
+      [7800, function () {
+        resetAll(true);
+        setNode('human_gate', 'waiting', { activity: 'Waiting for human approval', who: tag });
+        setEdge('e6', 'wait'); setEdge('e7', 'wait');
+        story(org + ': report is with a human reviewer', 'Waiting on Slack · After approval, the deliverables are produced');
+        chips(0, 1);
+        feed('file', 'technical_output.json landed in S3');
+        feed('hitl', org + ': draft report posted to Slack for review');
+        setTile('report', 'ready', 'Ready ✓');
+      }],
+      [8200, function () {
+        resetAll(true);
+        setNode('presentation', 'live', { who: tag });
+        setEdge('e6', 'done'); setEdge('e7', 'live');
+        var whoP = document.querySelector('#n-presentation [data-who]'); if (whoP) whoP.textContent = tag;
+        setTile('report', 'ready', 'Ready ✓');
+        setTile('deck', 'building', 'Building…');
+        setTile('data', 'building', 'Building…');
+        story(org + ': report approved; building the deck', 'Final deliverables are being written');
+        chips(1, 0);
+        feed('status', org + ': report approved in Slack');
+        feed('log', 'presentation engine: rendering slides…');
+      }],
+      [6200, function () {
+        setNode('presentation', 'done', { who: tag });
+        setEdge('e7', 'done');
+        setTile('deck', 'ready', 'Ready ✓');
+        setTile('data', 'ready', 'Ready ✓');
+        delivered++;
+        story(org + ': all deliverables ready', 'Report PDF · presentation deck · structured run data');
+        chips(0, 0);
+        feed('file', 'presentation.pptx + final_output.json landed in S3');
+        feed('status', org + ': pipeline complete; deck delivered to Slack');
+      }],
+      [3800, function () {
+        clearInterval(actTimer);
+        resetAll();
+        story('Floor is quiet', 'Next client intake arrives shortly…');
+        chips(0, 0);
+      }]
+    ];
+
+    var i = 0;
+    function next() {
+      if (i >= phases.length) { clearInterval(actTimer); runCycle(); return; }
+      var p = phases[i]; i++;
+      p[1]();
+      setTimeout(next, p[0]);
+    }
+    next();
+  }
+
+  resetAll();
+  setTimeout(runCycle, 600);
+})();
+</script>
+</body>
+</html>
