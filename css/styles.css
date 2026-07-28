@@ -1057,3 +1057,27 @@ a:hover {
   opacity: 1;
   transform: none;
 }
+
+/* Reusable full-width case-study card (content supplied by js/main.js). */
+.project-card--case-study{
+  grid-column:1 / -1;
+  display:grid;
+  grid-template-columns:minmax(0,1.12fr) minmax(320px,.88fr);
+  gap:0;padding:0;overflow:hidden;
+  background:linear-gradient(145deg,rgba(196,181,253,.08),var(--surface) 48%);
+  border-color:rgba(196,181,253,.22);
+}
+.project-case__visual{position:relative;display:block;min-height:430px;overflow:hidden;background:var(--bg);color:#fff;text-decoration:none}
+.project-case__visual::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(7,7,8,.72),transparent 48%);pointer-events:none}
+.project-case__visual img{display:block;width:100%;height:100%;object-fit:cover;object-position:center;transition:transform .55s var(--ease-out)}
+.project-card--case-study:hover .project-case__visual img{transform:scale(1.018)}
+.project-case__visual span{position:absolute;z-index:1;left:1.35rem;bottom:1.2rem;font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.project-case__body{display:flex;flex-direction:column;gap:1rem;padding:1.65rem 1.75rem 1.75rem}
+.project-case__role{margin:0;color:var(--accent-warm);font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.project-case__actions{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:.2rem}
+.project-case__actions a{display:inline-flex;align-items:center;min-height:42px;padding:.65rem .9rem;border:1px solid var(--border);border-radius:999px;color:#fff;font-size:.8rem;font-weight:700;text-decoration:none;transition:border-color .2s,background .2s}
+.project-case__actions a:first-child{background:var(--accent);border-color:var(--accent);color:#071014}
+.project-case__actions a:hover{border-color:var(--accent);background:var(--accent-dim)}
+.project-case__actions a:first-child:hover{background:#bae6fd}
+@media(max-width:900px){.project-card--case-study{grid-template-columns:1fr}.project-case__visual{min-height:360px}}
+@media(max-width:640px){.project-case__visual{min-height:240px}.project-case__body{padding:1.35rem}.project-case__actions a{flex:1;justify-content:center}}
