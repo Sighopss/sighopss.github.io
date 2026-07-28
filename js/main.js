@@ -36,8 +36,7 @@
       ],
       stack: ["HTML", "CSS", "JavaScript", "Responsive Design", "Accessibility", "Structured Data"],
       image: "images/ai-accelerator-hub-site.jpg",
-      live: "https://acceleratorhub.ai",
-      source: "https://github.com/AC-VIBE/VIBE-2026-WEBSITE"
+      live: "https://acceleratorhub.ai"
     }
   };
 
@@ -51,8 +50,7 @@
       '<p class="project-card__summary">' + project.summary + '</p>' +
       '<ul class="project-card__highlights">' + project.highlights.map(function (item) { return '<li>' + item + '</li>'; }).join('') + '</ul>' +
       '<div class="project-card__stack" aria-label="Technologies used">' + project.stack.map(function (item) { return '<span>' + item + '</span>'; }).join('') + '</div>' +
-      '<div class="project-case__actions"><a href="' + project.live + '" target="_blank" rel="noopener noreferrer">Live site ↗</a>' +
-      '<a href="' + project.source + '" target="_blank" rel="noopener noreferrer">Source ↗</a></div></div>';
+      '<div class="project-case__actions"><a href="' + project.live + '" target="_blank" rel="noopener noreferrer">Live site ↗</a></div></div>';
   }
 
   document.querySelectorAll("[data-project-case-study]").forEach(function (mount) {
