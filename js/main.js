@@ -35,7 +35,7 @@
         "Built a reusable team-data generator with eight portraits, LinkedIn mapping, and schema.org profiles"
       ],
       stack: ["HTML", "CSS", "JavaScript", "Responsive Design", "Accessibility", "Structured Data"],
-      image: "images/ai-accelerator-hub-site.jpg",
+      image: "images/ai-accelerator-hub-site.jpg?v=20260811-0950",
       live: "https://acceleratorhub.ai"
     }
   };

@@ -14,6 +14,11 @@
   --radius-sm: 10px;
   --radius-md: 16px;
   --radius-lg: 24px;
+  /* Shared card metrics: every card variant uses the same padding and gutter
+     so widths and internal rhythm stay uniform across sections. */
+  --card-pad: 1.5rem 1.6rem;
+  --card-gap: 1.25rem;
+  --card-min-h: 232px;
   --font-sans: "DM Sans", system-ui, sans-serif;
   --font-display: "Syne", var(--font-sans);
   --shadow-soft: 0 24px 80px rgba(0, 0, 0, 0.45);
@@ -553,19 +558,25 @@ a:hover {
   border-top: 1px solid var(--border);
 }
 
+/* 6 columns, tiled so every row fills exactly: 3+3 / 2+2+2 / 2+2+2.
+   Card order in the HTML is what makes this add up, so keep the two
+   --wide cards first if cards are ever added or reordered. */
 .bento {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  grid-auto-rows: minmax(120px, auto);
-  gap: 1rem;
+  grid-auto-rows: minmax(var(--card-min-h), auto);
+  gap: var(--card-gap);
 }
 
 .bento__card {
   grid-column: span 2;
+  display: flex;
+  flex-direction: column;
+  min-height: var(--card-min-h);
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 1.35rem 1.35rem 1.5rem;
+  padding: var(--card-pad);
   transition: border-color 0.25s, transform 0.25s var(--ease-out);
 }
 
@@ -618,6 +629,8 @@ a:hover {
   opacity: 0.7;
 }
 
+/* True 2-up: every card takes one of the two tracks, so the eight cards make
+   four full rows. (Spanning 2 here would have made each card full width.) */
 @media (max-width: 900px) {
   .bento {
     grid-template-columns: 1fr 1fr;
@@ -626,7 +639,7 @@ a:hover {
   .bento__card,
   .bento__card--wide,
   .bento__card--tall {
-    grid-column: span 2;
+    grid-column: span 1;
     grid-row: auto;
   }
 }
@@ -634,11 +647,13 @@ a:hover {
 @media (max-width: 520px) {
   .bento {
     grid-template-columns: 1fr;
+    grid-auto-rows: auto;
   }
 
   .bento__card,
   .bento__card--wide {
     grid-column: span 1;
+    min-height: 0;
   }
 }
 
@@ -648,10 +663,13 @@ a:hover {
   border-top: 1px solid var(--border);
 }
 
+/* 3 columns so the three standard cards fill one complete row instead of
+   leaving a half-width orphan. Full-bleed variants span 1 / -1. */
 .projects {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.25rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--card-gap);
+  align-items: stretch;
 }
 
 .project-card {
@@ -661,7 +679,7 @@ a:hover {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 1.5rem 1.65rem 1.65rem;
+  padding: var(--card-pad);
   transition: border-color 0.25s, transform 0.25s var(--ease-out);
 }
 
@@ -718,6 +736,12 @@ a:hover {
   font-size: 0.95rem;
   color: var(--text-muted);
   line-height: 1.6;
+}
+
+/* Standard cards sit side by side, so reserve an equal summary block. That
+   keeps every highlights list and stack row on the same baseline. */
+.projects > .project-card:not(.project-card--featured):not(.project-card--case-study) .project-card__summary {
+  min-height: calc(5 * 1.6em);
 }
 
 .project-card__highlights {
@@ -823,13 +847,19 @@ a:hover {
   .project-card__demo iframe { height: 500px; }
 }
 
-@media (max-width: 900px) {
+/* Below the 3-up threshold go straight to one column: a 2-up grid would put
+   the third standard card back on a row of its own. */
+@media (max-width: 1023px) {
   .projects {
     grid-template-columns: 1fr;
   }
 
   .project-card--featured {
     grid-column: auto;
+  }
+
+  .projects > .project-card .project-card__summary {
+    min-height: 0;
   }
 }
 
@@ -882,7 +912,7 @@ a:hover {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 1.5rem 1.65rem;
+  padding: var(--card-pad);
   transition: border-color 0.25s;
 }
 
@@ -1067,17 +1097,22 @@ a:hover {
   background:linear-gradient(145deg,rgba(196,181,253,.08),var(--surface) 48%);
   border-color:rgba(196,181,253,.22);
 }
-.project-case__visual{position:relative;display:grid;place-items:center;aspect-ratio:16 / 10;min-height:0;overflow:hidden;background:var(--bg);color:#fff;text-decoration:none}
+/* The visual has no intrinsic height, so it stretches to match the body column
+   and the panel always reaches the card edges. The shot is shown whole rather
+   than cropped; its own edges are near-black, so it sits flush on the panel. */
+.project-case__visual{position:relative;display:block;align-self:stretch;min-height:0;overflow:hidden;background:var(--bg);color:#fff;text-decoration:none}
 .project-case__visual::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(7,7,8,.72),transparent 48%);pointer-events:none}
-.project-case__visual img{display:block;width:100%;height:100%;object-fit:contain;object-position:center;transition:transform .55s var(--ease-out)}
+.project-case__visual img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:contain;object-position:50% 50%;transition:transform .55s var(--ease-out)}
 .project-card--case-study:hover .project-case__visual img{transform:scale(1.018)}
 .project-case__visual span{position:absolute;z-index:1;left:1.35rem;bottom:1.2rem;font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
-.project-case__body{display:flex;flex-direction:column;gap:1rem;padding:1.65rem 1.75rem 1.75rem}
+.project-case__body{display:flex;flex-direction:column;gap:1rem;padding:var(--card-pad)}
 .project-case__role{margin:0;color:var(--accent-warm);font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
 .project-case__actions{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:.2rem}
 .project-case__actions a{display:inline-flex;align-items:center;min-height:42px;padding:.65rem .9rem;border:1px solid var(--border);border-radius:999px;color:#fff;font-size:.8rem;font-weight:700;text-decoration:none;transition:border-color .2s,background .2s}
 .project-case__actions a:first-child{background:var(--accent);border-color:var(--accent);color:#071014}
 .project-case__actions a:hover{border-color:var(--accent);background:var(--accent-dim)}
 .project-case__actions a:first-child:hover{background:#bae6fd}
-@media(max-width:900px){.project-card--case-study{grid-template-columns:1fr}.project-case__visual{min-height:0}}
-@media(max-width:640px){.project-case__visual{min-height:0}.project-case__body{padding:1.35rem}.project-case__actions a{flex:1;justify-content:center}}
+/* Stacked: the visual is alone on its row, so it needs an explicit ratio to
+   have any height at all (the image inside is absolutely positioned). */
+@media(max-width:1023px){.project-card--case-study{grid-template-columns:1fr}.project-case__visual{aspect-ratio:16 / 10}}
+@media(max-width:640px){.project-case__visual{aspect-ratio:3 / 2}.project-case__actions a{flex:1;justify-content:center}}
